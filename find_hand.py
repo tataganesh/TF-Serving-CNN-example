@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import os
 import IPython
+import helpers
 PATH_TO_FROZEN_GRAPH = '/home/tata/Projects/hand_detector/inference_graph/frozen_inference_graph.pb'
 
 
@@ -33,26 +34,46 @@ def detect(image, sess):
 
     boxes, scores, classes, num_detections = map(
         np.squeeze, [boxes, scores, classes, num_detections])
-    img = image
+    hand_boxes = list()
     for box, score in zip(boxes, scores):
-        print(box, score)
         if(score > 0.05):
-            # y1, x1, y2, x2 = 
-            y1,x1,y2,x2 = box[0]*img.shape[0], box[1]*img.shape[1], box[2]*img.shape[0], box[3]*img.shape[1]
-            cv2.rectangle(image, (int(x1), int(y1)), ((int(x2), int(y2))), (255, 0, 0), 2)
-    return image
+            y1,x1,y2,x2 = box[0]*image.shape[0], box[1]*image.shape[1], box[2]*image.shape[0], box[3]*image.shape[1]
+            hand_boxes.append((int(x1), int(y1), int(x2), int(y2)))
+    return hand_boxes
 
 session = tf.Session(graph=detection_graph)
+
+
+def draw_box_with_ball(boxes, ball_box, image):
+    box_colour_mapping = dict()
+    if not ball_box:
+        for box in boxes:
+            box_colour_mapping[box] = (0, 0, 255)
+    else:
+        for box in boxes:
+            if detect_colour.bb_intersection_over_union(box, ball_box) > 0.5:
+                box_colour_mapping[box] = (0, 255, 0)
+            else:
+                box_colour_mapping[box] = (0, 0, 255)
+    for box, colour in box_colour_mapping.items():
+        cv2.rectangle(image, (box[0], box[1]), (box[2], box[3]), colour, 3)
+    return image
+
+
 def show_webcam(mirror=False):
     cam = cv2.VideoCapture(0)
     while True:
-        ret_val, img = cam.read()
-        img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-        img = detect(img, session)
-        cv2.imshow('my webcam', cv2.cvtColor(img,cv2.COLOR_RGB2BGR))
+        ret_val, bgrImage = cam.read()
+        ball_box = detect_colour.find_ball(bgrImage)
+        rgbImage = cv2.cvtColor(bgrImage,cv2.COLOR_BGR2RGB)
+        hand_boxes = detect(rgbImage, session)
+        if hand_boxes:
+            bgrImage = draw_box_with_ball(hand_boxes, ball_box,bgrImage)
+        cv2.imshow('my webcam', bgrImage)
         if cv2.waitKey(1) == 27: 
             break  # esc to quit
     cv2.destroyAllWindows()
+    
 
 if __name__ ==  "__main__":
     show_webcam()
