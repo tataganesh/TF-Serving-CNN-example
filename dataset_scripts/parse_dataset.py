@@ -38,19 +38,19 @@ def create_dataset(mat, csv_writer):
                 x1, y1, x2, y2 = get_bbox_from_mask(annotation[3])
                 data_row = [image_path, height, width, x1, y1, x2, y2]
                 csv_writer.writerow(data_row)
-                # cv2.rectangle(image, hand1_bbox[:2], hand1_bbox[2:4], (0, 255, 0))
+                cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 4)
             if annotation[4].shape[0] != 0:
                 x1, y1, x2, y2 = get_bbox_from_mask(annotation[4])
                 data_row = [image_path, width, height, CLASS_NAME, x1, y1, x2, y2]
                 csv_writer.writerow(data_row)
-                # cv2.rectangle(image, hand2_bbox[:2], hand2_bbox[2:4], (0, 255, 0))
-            # cv2.imshow("image", image)
-            # cv2.waitKey(0)
+                cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 4)
+            cv2.imshow("image", image)
+            cv2.waitKey(0)
 
 
 mat = sio.loadmat(config.DATASET_METADATA_PATH)
 
-csv_file = open('dataset.csv', 'wb')
+csv_file = open('dataset4.csv', 'wb')
 csv_writer = csv.writer(csv_file)
 create_dataset(mat, csv_writer)
 csv_file.close()

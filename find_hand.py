@@ -35,7 +35,7 @@ def detect(image, sess):
         np.squeeze, [boxes, scores, classes, num_detections])
     hand_boxes = list()
     for box, score in zip(boxes, scores):
-        if(score > 0.05):
+        if(score > 0.02):
             y1,x1,y2,x2 = box[0]*image.shape[0], box[1]*image.shape[1], box[2]*image.shape[0], box[3]*image.shape[1]
             hand_boxes.append((int(x1), int(y1), int(x2), int(y2)))
     return hand_boxes
@@ -51,7 +51,7 @@ def draw_box_with_ball(boxes, ball_box, image):
     else:
         # cv2.rectangle(image, ball_box[0:2], ball_box[2:4], (255,0,0), 3)
         for box in boxes:
-            if helpers.bb_intersection_over_union(box, ball_box) > 0.5:
+            if helpers.bb_intersection_over_union(box, ball_box) > 0.01:
                 box_colour_mapping[box] = (0, 255, 0)
             else:
                 box_colour_mapping[box] = (0, 0, 255)
