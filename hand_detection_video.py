@@ -1,10 +1,13 @@
-xfrom camera_hand_detection import detect
 import tensorflow as tf
 import cv2
 import numpy as np
+import os
+import IPython
+import helpers
+vid = '/home/tata/hand_video.mp4'
+PATH_TO_FROZEN_GRAPH = '/home/tata/Projects/cnn-hand-detector/hand_inference_graph/frozen_inference_graph.pb'
 
-vid = '/home/tata/video.mp4'
-PATH_TO_FROZEN_GRAPH = '/home/tata/Projects/hand_detector/output_inference_graph/frozen_inference_graph.pb'
+
 detection_graph = tf.Graph()
 with detection_graph.as_default():
   od_graph_def = tf.GraphDef()
@@ -13,19 +16,55 @@ with detection_graph.as_default():
     od_graph_def.ParseFromString(serialized_graph)
     tf.import_graph_def(od_graph_def, name='')
 
+
+def detect(image, sess):
+
+    image_np_expanded = np.expand_dims(image, axis=0)
+    height, width = image.shape[:2]
+    graph = detection_graph
+    image_tensor = graph.get_tensor_by_name('image_tensor:0')
+    boxes = graph.get_tensor_by_name('detection_boxes:0')
+    scores = graph.get_tensor_by_name('detection_scores:0')
+    classes = graph.get_tensor_by_name('detection_classes:0')
+    num_detections = graph.get_tensor_by_name('num_detections:0')
+
+    (boxes, scores, classes, num_detections) = sess.run(
+        [boxes, scores, classes, num_detections],
+        feed_dict={image_tensor: image_np_expanded})
+
+    boxes, scores, classes, num_detections = map(
+        np.squeeze, [boxes, scores, classes, num_detections])
+    hand_boxes = list()
+    for box, score in zip(boxes, scores):
+        if(score > 0.05):
+            y1,x1,y2,x2 = box[0]*image.shape[0], box[1]*image.shape[1], box[2]*image.shape[0], box[3]*image.shape[1]
+            hand_boxes.append((int(x1), int(y1), int(x2), int(y2)))
+    return hand_boxes
+
 session = tf.Session(graph=detection_graph)
+
+folder_path = "/home/tata/Projects/hand_detector/hand_images"
 def show_webcam(mirror=False):
     cam = cv2.VideoCapture(vid)
+    i = 0
     while cam.isOpened():
-        ret_val, img = cam.read()
-        print(ret_val)
-        img = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-        img = detect(img, session)
-        cv2.imshow('my webcam', img)
-        cv2.waitKey(0)
+        ret_val, bgrImage = cam.read()
+        if not ret_val:
+            break 
+        cv2.imwrite("frame_%d.jpg" % i, bgrImage)
+        i+=1
+        continue
+        ball_box = helpers.find_ball(bgrImage)
+        rgbImage = cv2.cvtColor(bgrImage,cv2.COLOR_BGR2RGB)
+        hand_boxes = detect(rgbImage, session)
+        if hand_boxes:
+            bgrImage = helpers.draw_box_with_ball(hand_boxes, ball_box,bgrImage)
+        cv2.imshow('my webcam', bgrImage)
         if cv2.waitKey(1) == 27: 
             break  # esc to quit
     cam.release()
     cv2.destroyAllWindows()
+    
 
-show_webcam()
+if __name__ ==  "__main__":
+    show_webcam()
