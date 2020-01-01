@@ -41,4 +41,3 @@ def run_on_video(vid_path=None):
 
 vid = '/home/tata/hand_video.mp4'
 run_on_video(vid)
-
