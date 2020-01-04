@@ -12,8 +12,8 @@ def main():
         request = predict_pb2.PredictRequest()
         request.model_spec.name = serving_config.model_name
         image = cv2.imread('/home/tata/hand2.jpg')
-        image_np_expanded = np.array([image] * 5) # Use a batch of 5 images for warmup
-        request.inputs['inputs'].CopyFrom(tf.contrib.util.make_tensor_proto(image_np_expanded, shape=image_np_expanded.shape))
+        image_batch = np.array([image] * 5) # Use a batch of 5 images for warmup
+        request.inputs['inputs'].CopyFrom(tf.contrib.util.make_tensor_proto(image_batch, shape=image_batch.shape))
         log = prediction_log_pb2.PredictionLog(
             predict_log=prediction_log_pb2.PredictLog(request=request))
         writer.write(log.SerializeToString())

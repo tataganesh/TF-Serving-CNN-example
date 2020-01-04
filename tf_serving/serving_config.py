@@ -1,4 +1,4 @@
 host = 'localhost'
 port =  8501
 model_name = 'hand_detector'
-restAPIport = 9000
+rest_api_port = 9000
