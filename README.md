@@ -17,3 +17,6 @@ Victor Dibia, HandTrack: A Library For Prototyping Real-time Hand TrackingInterf
 * [hand_detection_client.py](https://github.com/ganeshtata/TF-Serving-CNN-example/blob/add_readme/hand_detection_client.py) - Classes that enable interation with the model using gRPC or REST
 * [serving_config.py](https://github.com/ganeshtata/TF-Serving-CNN-example/blob/add_readme/tf_serving/serving_config.py) - Port and host configuration to interact with the served model
 * [hand_inference_graph](https://github.com/ganeshtata/TF-Serving-CNN-example/tree/add_readme/hand_inference_graph) - Saved model for Hand Detection
+
+
+## More details will be added soon to this README. 
