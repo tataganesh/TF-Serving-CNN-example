@@ -12,7 +12,16 @@ CONFIDENCE = 0.1
 RESIZE_WIDTH = 300
 RESIZE_HEIGHT = 300
 
-def extract_bboxes(network_output, image_height, image_width):
+def extract_bboxes(network_output, image_height, image_width):   
+    """Extract bounding boxes from output of Hand Detection network
+    
+    Args:
+        network_output (ndarray): Output of Hand detection network
+        image_height (int): Image width
+        image_width (int): Image height
+    Returns:
+        list: List of tuples. Each tuple represents a Hand box's coordinates - (x1, y1, x2, y2)
+    """        
     detection_boxes, detection_scores, _ = map(
     np.squeeze, network_output)
     hand_boxes = list()
@@ -24,7 +33,17 @@ def extract_bboxes(network_output, image_height, image_width):
     return hand_boxes
     
 class handsDetection:
+    """Class to extract hand boxes from images. Interaction of the model is through gRPC."""
+
     def __init__(self, host, port, model_name, signature_name="serving_default"):
+        """init method
+        
+        Args:
+            host (string): Hostname of the server
+            port (int): gRPC port to interact with the served model
+            model_name (string): Name of the served model 
+            signature_name (str, optional): Model signature name. Defaults to "serving_default".
+        """        
         self.channel = grpc.insecure_channel(host + ":" + str(port))
         self.stub = prediction_service_pb2_grpc.PredictionServiceStub(self.channel)
         self.request = predict_pb2.PredictRequest()
@@ -35,6 +54,16 @@ class handsDetection:
         self.req_res_time = 0
 
     def predict(self, image):
+        """Function to get hand boxes from an image
+        
+        Args:
+            image (ndarray): Input image
+        
+        Returns:
+            tuple: The tuple contains two elements.
+                    1. hand boxes 
+                    2. Avg. Time taken for inferencing
+        """        
         rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         height, width = rgb_image.shape[:2]
         self.count += 1 
@@ -60,7 +89,17 @@ class handsDetection:
         return hand_boxes, time_taken
 
 class handsDetectionRest:
+    """Class to extract hand boxes from images. Interaction of the model is through REST."""
+
     def __init__(self, host, port, model_name, signature_name="serving_default"):
+        """init method
+        
+        Args:
+            host (string): Hostname of the server
+            port (int): gRPC port to interact with the served model
+            model_name (string): Name of the served model 
+            signature_name (str, optional): Model signature name. Defaults to "serving_default".
+        """         
         self.url_prefix = "http://" + host + ":" + str(port) + "/v1/models/" +  model_name  + "/versions/"
         self.signature_name = signature_name
         self.headers = {"content-type": "application/json"}
@@ -69,6 +108,17 @@ class handsDetectionRest:
         self.req_res_time = 0
 
     def predict(self, image, version_number=1):
+        """Function to get hand boxes from an image
+        
+        Args:
+            image (ndarray): Input image
+            version_number (int, optional): Specific version of the model. Defaults to 1.
+        
+        Returns:
+            tuple: The tuple contains two elements.
+                    1. hand boxes 
+                    2. Avg. Time taken for inferencing
+        """        
         self.count += 1
         rgb_image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
         rgb_image = cv2.resize(rgb_image, (RESIZE_WIDTH, RESIZE_HEIGHT))
