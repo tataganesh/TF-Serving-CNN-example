@@ -9,12 +9,9 @@ Welcome to hand_detector_tf_serving's documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   
+TeacherAPI main
+===================
+.. automodule:: hand_detection_client
+   :members: 
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
