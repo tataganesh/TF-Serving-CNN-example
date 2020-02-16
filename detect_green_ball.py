@@ -1,5 +1,5 @@
 import cv2
-from helpers import find_ball
+from helpers import find_green_ball
 cam = cv2.VideoCapture(0)
 while True:
     ret_val, img = cam.read()

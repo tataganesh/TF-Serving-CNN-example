@@ -16,7 +16,7 @@ if args.method == "rest":
 else:   
     hands_detect_model = hand_detection_client.handsDetection(serving_config.host, serving_config.port, serving_config.model_name)
 
-def run_on_video(vid_path=None):
+def run(vid_path=None):
     if vid_path is not None:
         cam = cv2.VideoCapture(vid_path)
     else:
@@ -25,7 +25,7 @@ def run_on_video(vid_path=None):
         ret_val, bgr_image = cam.read()
         if not ret_val:
             break
-        ball_box = helpers.find_ball(bgr_image)
+        ball_box = helpers.find_green_ball(bgr_image)
         hand_boxes, time_taken = hands_detect_model.predict(bgr_image)
         if hand_boxes:
             bgr_image = helpers.draw_box_with_ball(hand_boxes, ball_box, bgr_image)
@@ -39,4 +39,4 @@ def run_on_video(vid_path=None):
     cv2.destroyAllWindows()
 
 vid = '/home/tata/hand_video.mp4'
-run_on_video(vid)
+run(vid)
