@@ -13,10 +13,14 @@ Victor Dibia, HandTrack: A Library For Prototyping Real-time Hand TrackingInterf
 
 ## File and folder Descriptions
 
-* [ball_with_hand.py](https://github.com/ganeshtata/TF-Serving-CNN-example/blob/add_readme/ball_with_hand.py) - Driver code to run the hand detection model on video frames
-* [hand_detection_client.py](https://github.com/ganeshtata/TF-Serving-CNN-example/blob/add_readme/hand_detection_client.py) - Classes that enable interation with the model using gRPC or REST
-* [serving_config.py](https://github.com/ganeshtata/TF-Serving-CNN-example/blob/add_readme/tf_serving/serving_config.py) - Port and host configuration to interact with the served model
-* [hand_inference_graph](https://github.com/ganeshtata/TF-Serving-CNN-example/tree/add_readme/hand_inference_graph) - Saved model for Hand Detection
+* [ball_with_hand.py](ball_with_hand.py) - Driver code to run the hand detection model on video frames
+* [hand_detection_client.py](hand_detection_client.py) - Classes that enable interation with the model using gRPC or REST
+* [serving_config.py](tf_serving/serving_config.py) - Port and host configuration to interact with the served model
+* [inference_graph](inference_graph) - Saved model for Hand Detection
+
+## Dependencies
+
+* [python dependencies](requirements.txt)
 
 
 ## More details will be added soon to this README. 
