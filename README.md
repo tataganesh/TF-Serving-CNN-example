@@ -21,6 +21,21 @@ Victor Dibia, HandTrack: A Library For Prototyping Real-time Hand TrackingInterf
 ## Dependencies
 
 * [python dependencies](requirements.txt)
+* [Install Tensorflow Serving using Docker](https://github.com/tensorflow/serving/blob/master/tensorflow_serving/g3doc/docker.md)
 
+## Example
+
+* Download the [sample video](https://drive.google.com/file/d/1W9Mi51EICjUCk0HPDrV2qnV6CMMc62Ra/view?usp=sharing)
+* Serve the hand detector
+
+    ```bash
+    docker run -p 8501:8500 -p 9000:8501  \
+        --mount type=bind,source=/home/tata/Projects/cnn-hand-detector/inference_graph/,target=/models/inference_graph  \ 
+        --mount type=bind,source=/home/tata/Projects/cnn-hand-detector/inference_graph/model_config.config,target=/models/model_config.config \  
+        -t -i tensorflow/serving --model_config_file=/models/model_config.config --model_config_file_poll_wait_seconds=10 \  --enable_model_warmup=true
+    ```
+    [![asciicast](https://asciinema.org/a/L86BFXVcRqCngY6Y60UPI2I12.svg)](https://asciinema.org/a/L86BFXVcRqCngY6Y60UPI2I12)
+    The server can now accept gRPC requests through port 8501 and REST requests through port 9000.
+* Run [ball_with_hand.py](ball_with_hand.py) ( change the path of `vid` to the downloaded video's path).
 
 ## More details will be added soon to this README. 
