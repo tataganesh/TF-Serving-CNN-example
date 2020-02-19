@@ -1,5 +1,5 @@
 grpcio==1.16.1
 numpy==1.15.4
 opencv-python==4.1.1.26
-requests==2.18.4
+requests==2.20.0
 tensorflow-serving-api==1.14.0
