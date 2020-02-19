@@ -20,6 +20,6 @@ tensorflow==1.14.0
 tensorflow-estimator==1.14.0
 tensorflow-serving-api==1.14.0
 termcolor==1.1.0
-urllib3==1.22
+urllib3==1.24.2
 Werkzeug==1.0.0
 wrapt==1.11.2
