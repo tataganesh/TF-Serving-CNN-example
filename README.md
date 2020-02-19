@@ -34,7 +34,8 @@ Victor Dibia, HandTrack: A Library For Prototyping Real-time Hand TrackingInterf
         --mount type=bind,source=/home/tata/Projects/cnn-hand-detector/inference_graph/model_config.config,target=/models/model_config.config \  
         -t -i tensorflow/serving --model_config_file=/models/model_config.config --model_config_file_poll_wait_seconds=10 \  --enable_model_warmup=true
     ```
-    [![asciicast](https://asciinema.org/a/L86BFXVcRqCngY6Y60UPI2I12.svg)](https://asciinema.org/a/L86BFXVcRqCngY6Y60UPI2I12)
+    <a href="https://asciinema.org/a/L86BFXVcRqCngY6Y60UPI2I12" target="_blank"><img src="https://asciinema.org/a/L86BFXVcRqCngY6Y60UPI2I12.svg" height="300" width="300"/></a>
+    
     The server can now accept gRPC requests through port 8501 and REST requests through port 9000.
 * Run [ball_with_hand.py](ball_with_hand.py) ( change the path of `vid` to the downloaded video's path).
 
