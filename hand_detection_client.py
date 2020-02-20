@@ -35,7 +35,7 @@ def extract_bboxes(network_output, image_height, image_width):
 class handsDetection:
     """Class to extract hand boxes from images. Interaction of the model is through gRPC."""
 
-    def __init__(self, host, port, model_name, signature_name="serving_default"):
+    def __init__(self, host, port, model_name, signature_name="serving_default", version_label_func=None):
         """init method
         
         Args:
@@ -52,6 +52,7 @@ class handsDetection:
         self.count = 0
         self.input_processing_time = 0
         self.req_res_time = 0
+        self.version_label_func = version_label_func
 
     def predict(self, image):
         """Function to get hand boxes from an image
@@ -63,14 +64,12 @@ class handsDetection:
             tuple: The tuple contains two elements.
                     1. hand boxes 
                     2. Avg. Time taken for inferencing
-        """        
+        """
         rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        height, width = rgb_image.shape[:2]
+        height, width = rgb_image.shape[:2] 
         self.count += 1 
-        # if self.count % 5 == 0:
-            # self.request.model_spec.version_label = "canary"
-        # else:
-            # self.request.model_spec.version_label = "stable"
+        if self.version_label_func is not None:
+            self.request.model_spec.version_label = self.version_label_func(self.count)
         image_batch = np.expand_dims(rgb_image, axis=0) # Sending a batch of 1
         start = time.time()
         # Input preparation     

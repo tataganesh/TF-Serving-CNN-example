@@ -11,10 +11,12 @@ parser.add_argument("--hold", help="Wait for key press for every image", action=
 parser.add_argument("--method", help="Grpc / Rest", default="grpc")
 args = parser.parse_args()
 
+# version_label_func = lambda x: "stable" if x%5 else "canary"
+version_label_func = None
 if args.method == "rest": 
     hands_detect_model = hand_detection_client.handsDetectionRest(serving_config.host, serving_config.rest_api_port, serving_config.model_name)
 else:   
-    hands_detect_model = hand_detection_client.handsDetection(serving_config.host, serving_config.port, serving_config.model_name)
+    hands_detect_model = hand_detection_client.handsDetection(serving_config.host, serving_config.port, serving_config.model_name, version_label_func=version_label_func)
 
 def run(vid_path=None):
     if vid_path is not None:
