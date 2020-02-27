@@ -9,6 +9,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--hold", help="Wait for key press for every image", action='store_true')
 parser.add_argument("--method", help="Grpc / Rest", default="grpc")
+parser.add_argument("--video_path", help="Path to video", default="hand_video.mp4")
 args = parser.parse_args()
 
 if args.method == "rest": 
@@ -38,5 +39,4 @@ def run(vid_path=None):
     cam.release()
     cv2.destroyAllWindows()
 
-vid = '/home/tata/hand_video.mp4'
-run(vid)
+run(args.video_path)

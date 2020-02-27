@@ -41,4 +41,6 @@ Victor Dibia, HandTrack: A Library For Prototyping Real-time Hand TrackingInterf
     The server can now accept gRPC requests through port 8501 and REST requests through port 9000.
 * Run [ball_with_hand.py](ball_with_hand.py) ( change the path of `vid` to the downloaded video's path).
 
+    ``` python3 ball_with_hand.py --method=grpc --video_path=/home/tata/hand_video.mp4 ```
+
 ## More details will be added soon to this README. 
