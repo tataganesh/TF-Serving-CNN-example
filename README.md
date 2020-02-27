@@ -39,11 +39,12 @@ Victor Dibia, HandTrack: A Library For Prototyping Real-time Hand TrackingInterf
     <a href="https://asciinema.org/a/L86BFXVcRqCngY6Y60UPI2I12" target="_blank"><img src="https://asciinema.org/a/L86BFXVcRqCngY6Y60UPI2I12.svg" height="300" width="300"/></a>
     
     The server can now accept gRPC requests through port 8501 and REST requests through port 9000.
-* Run [ball_with_hand.py](ball_with_hand.py) ( change the path of `vid` to the downloaded video's path).
+* Run [ball_with_hand.py](ball_with_hand.py) using either `gRPC` or `REST`
 
     ``` python3 ball_with_hand.py --method=grpc --video_path=/home/tata/hand_video.mp4 ```
 
     Demo Video - 
+
   [![Tensorflow Serving Demo](https://img.youtube.com/vi/yJwxuasLETQ/0.jpg)](https://www.youtube.com/watch?v=yJwxuasLETQ)
 
 ## More details will be added soon to this README. 
